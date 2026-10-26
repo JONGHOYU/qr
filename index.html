@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="URL이나 텍스트를 입력하면 즉시 고해상도 QR 코드를 생성하고 다운로드할 수 있는 웹 앱">
+  <title>QR Code Studio - 빠르고 예쁜 QR 코드 생성기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Standalone QR Code Generator Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="background-decorations">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <main class="app-container">
+    <header class="header">
+      <div class="badge">✨ Fast & Secure QR Generator</div>
+      <h1 class="title">QR Code <span class="gradient-text">Studio</span></h1>
+      <p class="subtitle">URL 또는 문구를 입력하면 실시간으로 감각적인 QR 코드를 만들어 드립니다.</p>
+    </header>
+
+    <div class="workspace-grid">
+      <!-- Input & Customization Panel -->
+      <section class="panel editor-panel card">
+        <h2 class="section-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          입력 및 스타일 설정
+        </h2>
+
+        <div class="input-group">
+          <label for="url-input" class="input-label">링크(URL) 또는 텍스트</label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="url-input" 
+              placeholder="예: https://naver.com 또는 텍스트 입력" 
+              value="https://github.com"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button id="clear-btn" class="icon-btn" title="입력 지우기" aria-label="입력 내용 지우기">✕</button>
+          </div>
+          <div class="quick-presets">
+            <button type="button" class="preset-tag" data-val="https://google.com">Google</button>
+            <button type="button" class="preset-tag" data-val="https://naver.com">Naver</button>
+            <button type="button" class="preset-tag" data-val="https://youtube.com">YouTube</button>
+            <button type="button" class="preset-tag" data-val="https://instagram.com">Instagram</button>
+          </div>
+        </div>
+
+        <div class="options-grid">
+          <!-- QR Color -->
+          <div class="option-field">
+            <label for="fg-color" class="field-label">QR 색상</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="fg-color" value="#111827">
+              <span id="fg-color-hex" class="color-hex">#111827</span>
+            </div>
+          </div>
+
+          <!-- Background Color -->
+          <div class="option-field">
+            <label for="bg-color" class="field-label">배경 색상</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="bg-color" value="#ffffff">
+              <span id="bg-color-hex" class="color-hex">#ffffff</span>
+            </div>
+          </div>
+
+          <!-- Error Correction Level -->
+          <div class="option-field">
+            <label for="error-level" class="field-label">오류 복원율</label>
+            <select id="error-level" class="styled-select">
+              <option value="L">Level L (7% 복원)</option>
+              <option value="M" selected>Level M (15% 권장)</option>
+              <option value="Q">Level Q (25% 복원)</option>
+              <option value="H">Level H (30% 최고)</option>
+            </select>
+          </div>
+
+          <!-- Resolution -->
+          <div class="option-field">
+            <label for="qr-size" class="field-label">이미지 해상도</label>
+            <select id="qr-size" class="styled-select">
+              <option value="256">256 x 256 px (기본)</option>
+              <option value="512" selected>512 x 512 px (고화질)</option>
+              <option value="1024">1024 x 1024 px (초고화질 인쇄용)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Color Palette Quick Pick -->
+        <div class="palette-section">
+          <span class="field-label">추천 테마 색상</span>
+          <div class="palette-list">
+            <button type="button" class="palette-chip" data-fg="#1e1e24" data-bg="#ffffff" style="--c1:#1e1e24;--c2:#ffffff;" title="모던 흑백"></button>
+            <button type="button" class="palette-chip" data-fg="#4f46e5" data-bg="#eef2ff" style="--c1:#4f46e5;--c2:#eef2ff;" title="인디고 블루"></button>
+            <button type="button" class="palette-chip" data-fg="#059669" data-bg="#ecfdf5" style="--c1:#059669;--c2:#ecfdf5;" title="에메랄드 포레스트"></button>
+            <button type="button" class="palette-chip" data-fg="#e11d48" data-bg="#fff1f2" style="--c1:#e11d48;--c2:#fff1f2;" title="로즈 핑크"></button>
+            <button type="button" class="palette-chip" data-fg="#0f172a" data-bg="#f8fafc" style="--c1:#0f172a;--c2:#f8fafc;" title="슬레이트"></button>
+            <button type="button" class="palette-chip" data-fg="#d97706" data-bg="#fffbeb" style="--c1:#d97706;--c2:#fffbeb;" title="웜 앰버"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Preview & Download Panel -->
+      <section class="panel preview-panel card">
+        <h2 class="section-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          실시간 미리보기
+        </h2>
+
+        <div class="preview-display">
+          <div class="qr-frame-shadow">
+            <div id="qrcode-wrapper" class="qrcode-wrapper">
+              <div id="qrcode"></div>
+            </div>
+          </div>
+          <div id="url-caption" class="url-caption" title=""></div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="download-png-btn" class="btn btn-primary" id="btn-download">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            PNG 다운로드
+          </button>
+          <button id="copy-img-btn" class="btn btn-secondary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            클립보드 복사
+          </button>
+        </div>
+
+        <div id="toast" class="toast">복사되었습니다!</div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <p>💡 브라우저 내에서 안전하게 즉시 생성되며 데이터가 외부 서버로 전송되지 않습니다.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
